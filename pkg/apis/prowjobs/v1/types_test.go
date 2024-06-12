@@ -822,37 +822,37 @@ func TestProwJobSpec_GetPipelineRunSpec(t *testing.T) {
 					},
 				},
 			},
-            want: &pipelinev1.PipelineRunSpec{
-                TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
-                    ServiceAccountName: "robot",
-                }),
-                PipelineSpec: &pipelinev1.PipelineSpec{
-                    Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
-                },
-            },
+			want: &pipelinev1.PipelineRunSpec{
+				TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
+					ServiceAccountName: "robot",
+				}),
+				PipelineSpec: &pipelinev1.PipelineSpec{
+					Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
+				},
+			},
 		},
 		{
 			name: "only TektonPipelineRunSpec set with V1",
 			fields: fields{
 				TektonPipelineRunSpec: &TektonPipelineRunSpec{
 					V1: &pipelinev1.PipelineRunSpec{
-                        TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
-                            ServiceAccountName: "robot",
-                        }),
-                        PipelineSpec: &pipelinev1.PipelineSpec{
-                            Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
-                        },
-                    },
+						TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
+							ServiceAccountName: "robot",
+						}),
+						PipelineSpec: &pipelinev1.PipelineSpec{
+							Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
+						},
+					},
 				},
 			},
-            want: &pipelinev1.PipelineRunSpec{
-                TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
-                    ServiceAccountName: "robot",
-                }),
-                PipelineSpec: &pipelinev1.PipelineSpec{
-                    Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
-                },
-            },
+			want: &pipelinev1.PipelineRunSpec{
+				TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
+					ServiceAccountName: "robot",
+				}),
+				PipelineSpec: &pipelinev1.PipelineSpec{
+					Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "abc"}}},
+				},
+			},
 		},
 		{
 			name: "TektonPipelineRunSpec set with V1Beta1 and V1",
@@ -865,23 +865,23 @@ func TestProwJobSpec_GetPipelineRunSpec(t *testing.T) {
 						},
 					},
 					V1: &pipelinev1.PipelineRunSpec{
-                        TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
-                            ServiceAccountName: "robot",
-                        }),
-                        PipelineSpec: &pipelinev1.PipelineSpec{
-                            Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "def"}}},
-                        },
-                    },
+						TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
+							ServiceAccountName: "robot",
+						}),
+						PipelineSpec: &pipelinev1.PipelineSpec{
+							Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "def"}}},
+						},
+					},
 				},
 			},
-            want: &pipelinev1.PipelineRunSpec{
-                TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
-                    ServiceAccountName: "robot",
-                }),
-                PipelineSpec: &pipelinev1.PipelineSpec{
-                    Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "def"}}},
-                },
-            },
+			want: &pipelinev1.PipelineRunSpec{
+				TaskRunTemplate: (pipelinev1.PipelineTaskRunTemplate{
+					ServiceAccountName: "robot",
+				}),
+				PipelineSpec: &pipelinev1.PipelineSpec{
+					Tasks: []pipelinev1.PipelineTask{{Name: "implicit git resource", TaskRef: &pipelinev1.TaskRef{Name: "def"}}},
+				},
+			},
 		},
 	}
 	for _, tt := range tests {

@@ -1696,10 +1696,10 @@ func TestValidatePipelineRunSpec(t *testing.T) {
 			name:    "reject implicit ref for periodic",
 			jobType: prowapi.PeriodicJob,
 			spec: func(s *pipelinev1.PipelineRunSpec) {
-                s.PipelineSpec = &pipelinev1.PipelineSpec{
-                    Tasks: []pipelinev1.PipelineTask{{Name: "git ref", TaskRef: &pipelinev1.TaskRef{Name: "PROW_IMPLICIT_GIT_REF"}}}}
-            },
-            pass: false,
+				s.PipelineSpec = &pipelinev1.PipelineSpec{
+					Tasks: []pipelinev1.PipelineTask{{Name: "git ref", TaskRef: &pipelinev1.TaskRef{Name: "PROW_IMPLICIT_GIT_REF"}}}}
+			},
+			pass: false,
 		},
 		{
 			name:    "allow implicit ref for presubmit",
