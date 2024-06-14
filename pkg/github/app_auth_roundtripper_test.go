@@ -31,7 +31,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 
-	utilpointer "k8s.io/utils/pointer"
+	utilpointer "k8s.io/utils/ptr"
 )
 
 // *appsAuthError implements the error interface
@@ -121,7 +121,7 @@ func TestAppsAuth(t *testing.T) {
 		},
 		{
 			name:                "App installation auth success, everything served from cache",
-			cachedAppSlug:       utilpointer.String("ci-app"),
+			cachedAppSlug:       utilpointer.To("ci-app"),
 			cachedInstallations: map[string]AppInstallation{"org": {ID: 1}},
 			cachedTokens:        map[int64]*AppInstallationToken{1: {Token: "the-token", ExpiresAt: time.Now().Add(time.Hour)}},
 			doRequest: func(c Client) error {
@@ -148,7 +148,7 @@ func TestAppsAuth(t *testing.T) {
 		},
 		{
 			name:                "App installation auth success, new token is requested",
-			cachedAppSlug:       utilpointer.String("ci-app"),
+			cachedAppSlug:       utilpointer.To("ci-app"),
 			cachedInstallations: map[string]AppInstallation{"org": {ID: 1}},
 			doRequest: func(c Client) error {
 				_, err := c.GetOrg("org")
@@ -183,7 +183,7 @@ func TestAppsAuth(t *testing.T) {
 		},
 		{
 			name:          "App installation auth success, installations and token is requested",
-			cachedAppSlug: utilpointer.String("ci-app"),
+			cachedAppSlug: utilpointer.To("ci-app"),
 			doRequest: func(c Client) error {
 				_, err := c.GetOrg("org")
 				return err
@@ -344,7 +344,7 @@ func TestAppsAuth(t *testing.T) {
 		},
 		{
 			name:          "App installation request has no installation, failure",
-			cachedAppSlug: utilpointer.String("ci-app"),
+			cachedAppSlug: utilpointer.To("ci-app"),
 			doRequest: func(c Client) error {
 				_, err := c.GetOrg("other-org")
 				expectedErrMsgSubstr := "failed to get installation id for org other-org: the github app is not installed in organization other-org"
@@ -373,7 +373,7 @@ func TestAppsAuth(t *testing.T) {
 		},
 		{
 			name:                "Check app installation for repo uses JWT",
-			cachedAppSlug:       utilpointer.String("ci-app"),
+			cachedAppSlug:       utilpointer.To("ci-app"),
 			cachedTokens:        map[int64]*AppInstallationToken{1: {Token: "the-token", ExpiresAt: time.Now().Add(time.Hour)}},
 			cachedInstallations: map[string]AppInstallation{"kuber": {ID: 1}},
 			doRequest: func(c Client) error {

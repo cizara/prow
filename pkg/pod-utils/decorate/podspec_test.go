@@ -30,7 +30,7 @@ import (
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/diff"
-	utilpointer "k8s.io/utils/pointer"
+	utilpointer "k8s.io/utils/ptr"
 	"sigs.k8s.io/yaml"
 
 	prowapi "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
@@ -1252,7 +1252,7 @@ func TestProwJobToPod_setsTerminationGracePeriodSeconds(t *testing.T) {
 			name: "Existing GracePeriodSeconds is not overwritten",
 			prowjob: &prowapi.ProwJob{
 				Spec: prowapi.ProwJobSpec{
-					PodSpec: &coreapi.PodSpec{TerminationGracePeriodSeconds: utilpointer.Int64(60), Containers: []coreapi.Container{{}}},
+					PodSpec: &coreapi.PodSpec{TerminationGracePeriodSeconds: utilpointer.To(int64(60)), Containers: []coreapi.Container{{}}},
 					DecorationConfig: &prowapi.DecorationConfig{
 						UtilityImages: &prowapi.UtilityImages{},
 						Timeout:       &prowapi.Duration{Duration: 10 * time.Second},
@@ -1455,7 +1455,7 @@ func TestDecorate(t *testing.T) {
 						},
 						GCSCredentialsSecret:        &gCSCredentialsSecret,
 						DefaultServiceAccountName:   &defaultServiceAccountName,
-						SetLimitEqualsMemoryRequest: utilpointer.Bool(true),
+						SetLimitEqualsMemoryRequest: utilpointer.To(true),
 					},
 					Refs: &prowapi.Refs{
 						Org: "org", Repo: "repo", BaseRef: "main", BaseSHA: "abcd1234",
@@ -1516,7 +1516,7 @@ func TestDecorate(t *testing.T) {
 						},
 						GCSCredentialsSecret:        &gCSCredentialsSecret,
 						DefaultServiceAccountName:   &defaultServiceAccountName,
-						SetLimitEqualsMemoryRequest: utilpointer.Bool(true),
+						SetLimitEqualsMemoryRequest: utilpointer.To(true),
 						DefaultMemoryRequest:        resourcePtr("4Gi"),
 					},
 					Refs: &prowapi.Refs{

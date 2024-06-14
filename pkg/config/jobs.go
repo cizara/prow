@@ -28,6 +28,7 @@ import (
 	pipelinev1 "github.com/tektoncd/pipeline/pkg/apis/pipeline/v1"
 
 	v1 "k8s.io/api/core/v1"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	prowapi "sigs.k8s.io/prow/pkg/apis/prowjobs/v1"
 	"sigs.k8s.io/prow/pkg/github"
@@ -161,7 +162,8 @@ func (jb JobBase) GetPipelineRunSpec() (*pipelinev1.PipelineRunSpec, error) {
 			found = jb.TektonPipelineRunSpec.V1
 		} else if jb.TektonPipelineRunSpec.V1Beta1 != nil {
 			var spec pipelinev1.PipelineRunSpec
-			if err := jb.TektonPipelineRunSpec.V1Beta1.ConvertTo(context.TODO(), &spec); err != nil {
+			var meta metav1.ObjectMeta
+			if err := jb.TektonPipelineRunSpec.V1Beta1.ConvertTo(context.TODO(), &spec, &meta); err != nil {
 				return nil, err
 			}
 			found = &spec
