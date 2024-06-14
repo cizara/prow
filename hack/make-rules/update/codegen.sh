@@ -327,7 +327,7 @@ gen-gangway-apidescriptorpb-for-cloud-endpoints(){
 patch-tekton-files(){
     echo >&2 "Patching Tekton files"
     $SED -i '/type ParamValue struct {/c\
-    // +kubebuilder:validation:Type=object\
+    // +kubebuilder:validation:Type=string\
     // +kubebuilder:pruning:PreserveUnknownFields\
     type ParamValue struct {' \
     vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1/param_types.go \
