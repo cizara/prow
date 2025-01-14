@@ -319,6 +319,31 @@ gen-gangway-apidescriptorpb-for-cloud-endpoints(){
     gangway.proto
 }
 
+# Patch the Tekton files to allow for CRD to be generated (https://github.com/tektoncd/pipeline/issues/6924)
+# Add kubebuild markers to the ParamValue struct to allow for object type and to preserve unknown fields.
+# Change the Params, ParamsSpecs, and IncludeParams fields to be slices instead of structs as are not 
+# being generated correctly by controller-gen (https://github.com/kubernetes-sigs/controller-tools/issues/435)
+# in the version currently used
+patch-tekton-files(){
+    echo >&2 "Patching Tekton files"
+    $SED -i '/type ParamValue struct {/c\
+    // +kubebuilder:validation:Type=string\
+    // +kubebuilder:pruning:PreserveUnknownFields\
+    type ParamValue struct {' \
+    vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1/param_types.go \
+    vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1/param_types.go
+
+    $SED -i 's/Params Params `json:"params,omitempty"`/Params []Param `json:"params,omitempty"`/' \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1/*.go \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1/*.go
+    $SED -i 's/Params ParamSpecs `json:"params,omitempty"`/Params []ParamSpec `json:"params,omitempty"`/' \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1/*.go \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1/*.go
+    $SED -i 's/Include IncludeParamsList `json:"include,omitempty"`/Include []IncludeParams `json:"include,omitempty"`/' \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1/*.go \
+        vendor/github.com/tektoncd/pipeline/pkg/apis/pipeline/v1beta1/*.go
+}
+
 gen-prow-config-documented
 
 export GO111MODULE=off
@@ -337,6 +362,7 @@ gen-client
 gen-lister
 gen-informer
 gen-spyglass-bindata
+patch-tekton-files
 gen-prowjob-crd
 export GO111MODULE=on
 
