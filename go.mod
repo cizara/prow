@@ -51,7 +51,7 @@ require (
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
-	github.com/tektoncd/pipeline v0.61.0
+	github.com/tektoncd/pipeline v0.65.0
 	go.uber.org/zap v1.27.0
 	go4.org v0.0.0-20201209231011-d4a079459e60
 	gocloud.dev v0.40.0
@@ -342,7 +342,7 @@ require (
 	github.com/karamaru-alpha/copyloopvar v1.2.1 // indirect
 	github.com/kisielk/errcheck v1.9.0 // indirect
 	github.com/kkHAIKE/contextcheck v1.1.6 // indirect
-	github.com/klauspost/compress v1.16.6 // indirect
+	github.com/klauspost/compress v1.16.7 // indirect
 	github.com/kulti/thelper v0.6.3 // indirect
 	github.com/kunwardeep/paralleltest v1.0.10 // indirect
 	github.com/lasiar/canonicalheader v1.1.2 // indirect
