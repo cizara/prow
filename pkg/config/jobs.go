@@ -127,8 +127,8 @@ type JobBase struct {
 	SourcePath string `json:"-"`
 	// Spec is the Kubernetes pod spec used if Agent is kubernetes.
 	Spec *v1.PodSpec `json:"spec,omitempty"`
-	// PipelineRunSpec is the tekton pipeline spec used if Agent is tekton-pipeline.
-	PipelineRunSpec *pipelinev1.PipelineRunSpec `json:"pipeline_run_spec,omitempty"`
+	// TektonPipelineRunSpec is the versioned tekton pipeline spec used if Agent is tekton-pipeline.
+	PipelineRunSpec *prowapi.PipelineRunSpec `json:"pipeline_run_spec,omitempty"`
 	// TektonPipelineRunSpec is the versioned tekton pipeline spec used if Agent is tekton-pipeline.
 	TektonPipelineRunSpec *prowapi.TektonPipelineRunSpec `json:"tekton_pipeline_run_spec,omitempty"`
 	// Annotations are unused by prow itself, but provide a space to configure other automation.
@@ -166,7 +166,7 @@ func (jb JobBase) GetAnnotations() map[string]string {
 }
 
 func (jb JobBase) HasPipelineRunSpec() bool {
-	if jb.TektonPipelineRunSpec != nil && jb.TektonPipelineRunSpec.V1Beta1 != nil {
+	if jb.TektonPipelineRunSpec != nil && jb.TektonPipelineRunSpec.V1 != nil {
 		return true
 	}
 	if jb.PipelineRunSpec != nil {
@@ -178,14 +178,20 @@ func (jb JobBase) HasPipelineRunSpec() bool {
 func (jb JobBase) GetPipelineRunSpec() (*pipelinev1.PipelineRunSpec, error) {
 	var found *pipelinev1.PipelineRunSpec
 	if jb.TektonPipelineRunSpec != nil {
-		found = jb.TektonPipelineRunSpec.V1Beta1
+		if jb.TektonPipelineRunSpec.V1 != nil {
+			found = jb.TektonPipelineRunSpec.V1
+		}
 	}
 	if found == nil && jb.PipelineRunSpec != nil {
-		found = jb.PipelineRunSpec
+		if jb.PipelineRunSpec.V1 != nil {
+			found = jb.PipelineRunSpec.V1
+		}
 	}
+
 	if found == nil {
 		return nil, errors.New("pipeline run spec not found")
 	}
+
 	return found, nil
 }
 

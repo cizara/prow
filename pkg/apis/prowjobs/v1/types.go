@@ -193,11 +193,7 @@ type ProwJobSpec struct {
 	// PipelineRunSpec provides the basis for running the test as
 	// a pipeline-crd resource
 	// https://github.com/tektoncd/pipeline
-	// +kubebuilder:validation:Type=object
-	// +kubebuilder:validation:XPreserveUnknownFields
-	// +kubebuilder:pruning:PreserveUnknownFields
-	// +kubebuilder:validation:Schemaless
-	PipelineRunSpec *pipelinev1.PipelineRunSpec `json:"pipeline_run_spec,omitempty"`
+	PipelineRunSpec *PipelineRunSpec `json:"pipeline_run_spec,omitempty"`
 
 	// TektonPipelineRunSpec provides the basis for running the test as
 	// a pipeline-crd resource
@@ -236,10 +232,10 @@ type ProwJobSpec struct {
 }
 
 func (pjs ProwJobSpec) HasPipelineRunSpec() bool {
-	if pjs.TektonPipelineRunSpec != nil && pjs.TektonPipelineRunSpec.V1Beta1 != nil {
+	if pjs.TektonPipelineRunSpec != nil && pjs.TektonPipelineRunSpec.V1 != nil {
 		return true
 	}
-	if pjs.PipelineRunSpec != nil {
+	if pjs.PipelineRunSpec != nil && pjs.PipelineRunSpec.V1 != nil {
 		return true
 	}
 	return false
@@ -248,10 +244,10 @@ func (pjs ProwJobSpec) HasPipelineRunSpec() bool {
 func (pjs ProwJobSpec) GetPipelineRunSpec() (*pipelinev1.PipelineRunSpec, error) {
 	var found *pipelinev1.PipelineRunSpec
 	if pjs.TektonPipelineRunSpec != nil {
-		found = pjs.TektonPipelineRunSpec.V1Beta1
+		found = pjs.TektonPipelineRunSpec.V1
 	}
 	if found == nil && pjs.PipelineRunSpec != nil {
-		found = pjs.PipelineRunSpec
+		found = pjs.PipelineRunSpec.V1
 	}
 	if found == nil {
 		return nil, errors.New("pipeline run spec not found")
@@ -1268,13 +1264,22 @@ type JenkinsSpec struct {
 	GitHubBranchSourceJob bool `json:"github_branch_source_job,omitempty"`
 }
 
+// PipelineRunSpec is optional parameters for Tekton pipeline jobs.
+type PipelineRunSpec struct {
+	// +kubebuilder:validation:Type=object
+	// +kubebuilder:validation:XPreserveUnknownFields
+	// +kubebuilder:pruning:PreserveUnknownFields
+	// +kubebuilder:validation:Schemaless
+	V1 *pipelinev1.PipelineRunSpec `json:"v1,omitempty"`
+}
+
 // TektonPipelineRunSpec is optional parameters for Tekton pipeline jobs.
 type TektonPipelineRunSpec struct {
 	// +kubebuilder:validation:Type=object
 	// +kubebuilder:validation:XPreserveUnknownFields
 	// +kubebuilder:pruning:PreserveUnknownFields
 	// +kubebuilder:validation:Schemaless
-	V1Beta1 *pipelinev1.PipelineRunSpec `json:"v1beta1,omitempty"`
+	V1 *pipelinev1.PipelineRunSpec `json:"v1,omitempty"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
