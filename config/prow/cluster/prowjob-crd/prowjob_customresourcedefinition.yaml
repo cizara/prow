@@ -1746,8 +1746,11 @@ spec:
                   PipelineRunSpec provides the basis for running the test as
                   a pipeline-crd resource
                   https://github.com/tektoncd/pipeline
+                properties:
+                  v1:
+                    type: object
+                    x-kubernetes-preserve-unknown-fields: true
                 type: object
-                x-kubernetes-preserve-unknown-fields: true
               pod_spec:
                 description: |-
                   PodSpec provides the basis for running the test under
@@ -9723,7 +9726,7 @@ spec:
                   a pipeline-crd resource
                   https://github.com/tektoncd/pipeline
                 properties:
-                  v1beta1:
+                  v1:
                     type: object
                     x-kubernetes-preserve-unknown-fields: true
                 type: object
